@@ -6,5 +6,8 @@ import io.reactivex.Observable
 interface IGifRepository {
 
     fun getRandomGif(): Observable<GifModel>
-    fun getGifPage(category: String, pageNumber: Int): Observable<List<GifModel>>
+
+    fun observeGifs(): Observable<List<GifModel>>
+
+    fun loadGifPage(category: String, clearPrevious: Boolean): Observable<Boolean>
 }

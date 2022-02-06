@@ -8,13 +8,17 @@ class LoadGifsUseCase(
     private val repository: IGifRepository
 ) {
 
-    fun buildObservable(params: Params): Observable<List<GifItem>> {
-        return repository.getGifPage(params.category, params.pageNumber)
-            .map { it.map { gifModel -> GifItem(gifUrl = gifModel.gifURL ?: "") } }
+    fun observeGifs(): Observable<List<GifItem>> {
+        return repository.observeGifs()
+            .map { gifModels -> GifMapper.mapModelToItem(gifModels) }
     }
 
-    class Params(
+    fun loadGifs(params: LoadParams): Observable<Boolean> {
+        return repository.loadGifPage(params.category, params.clearPrevious)
+    }
+
+    class LoadParams(
         val category: String,
-        val pageNumber: Int
+        val clearPrevious: Boolean
     )
 }

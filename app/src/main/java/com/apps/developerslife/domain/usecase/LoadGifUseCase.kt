@@ -9,10 +9,9 @@ class LoadGifUseCase(
 ) {
 
     fun buildObservable(params: Params): Observable<GifItem> {
-        return repository.getRandomGif().map { model -> GifItem(model.gifURL?: "")}
+        return repository.getRandomGif()
+            .map { gifModel -> GifMapper.mapModelToItem(gifModel) }
     }
 
-    class Params(
-        id: Int
-    )
+    class Params
 }

@@ -6,81 +6,96 @@
     android:layout_height="match_parent"
     tools:context=".category.CategoryFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
+    <com.apps.developerslife.category.adapter.NonScrollableRecycler
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@id/back_image_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:minHeight="250dp"
-        tools:background="#6F2196F3"/>
+        tools:background="#6F2196F3" />
+
+    <TextView
+        android:id="@+id/gif_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/text_gradient_background"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@id/recyclerView"
+        tools:text="Sample Text" />
 
     <ImageView
         android:id="@+id/back_image_view"
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/round_button_selector"
         android:src="@drawable/arrow_back"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/forward_image_view"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/forward_image_view"
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/round_button_selector"
         android:src="@drawable/arrow_forward"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/back_image_view"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
+        app:layout_constraintStart_toEndOf="@id/back_image_view" />
 
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/recyclerView"
-        app:layout_constraintEnd_toEndOf="@id/recyclerView"
-        app:layout_constraintTop_toTopOf="@id/recyclerView"
-        app:layout_constraintBottom_toBottomOf="@id/recyclerView"
         android:indeterminate="true"
         android:visibility="gone"
-        tools:visibility="visible"/>
+        app:layout_constraintBottom_toBottomOf="@id/recyclerView"
+        app:layout_constraintEnd_toEndOf="@id/recyclerView"
+        app:layout_constraintStart_toStartOf="@id/recyclerView"
+        app:layout_constraintTop_toTopOf="@id/recyclerView"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/dataLoadErrorTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Произошла ошибка при загрузке данных. Проверьте подключение к сети."
-        android:gravity="center_horizontal"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        app:layout_constraintStart_toStartOf="@id/recyclerView"
-        app:layout_constraintEnd_toEndOf="@id/recyclerView"
-        app:layout_constraintTop_toTopOf="@id/recyclerView"
-        app:layout_constraintBottom_toTopOf="@id/retryButton"
-        app:layout_constraintVertical_chainStyle="packed"
+        android:gravity="center_horizontal"
         android:paddingBottom="8dp"
+        android:text="Произошла ошибка при загрузке данных. Проверьте подключение к сети."
         android:visibility="gone"
-        tools:visibility="visible"/>
+        app:layout_constraintBottom_toTopOf="@id/retryButton"
+        app:layout_constraintEnd_toEndOf="@id/recyclerView"
+        app:layout_constraintStart_toStartOf="@id/recyclerView"
+        app:layout_constraintTop_toTopOf="@id/recyclerView"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:visibility="visible" />
 
     <Button
         android:id="@+id/retryButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="повторить"
-        app:layout_constraintEnd_toEndOf="@id/recyclerView"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/recyclerView"
+        app:layout_constraintEnd_toEndOf="@id/recyclerView"
         app:layout_constraintStart_toStartOf="@id/recyclerView"
         app:layout_constraintTop_toBottomOf="@id/dataLoadErrorTextView"
-        android:visibility="gone"
-        tools:visibility="visible"/>
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

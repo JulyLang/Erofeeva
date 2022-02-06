@@ -111,11 +111,5 @@ class CategoryFragment : Fragment(), CategoryContract.View {
         gifRecycler?.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         gifRecycler?.adapter = gifAdapter
         snapHelper.attachToRecyclerView(gifRecycler)
-
-//        gifRecycler?.addOnItemTouchListener(object : RecyclerView.SimpleOnItemTouchListener() {
-//            override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
-//                return true
-//            }
-//        })
     }
 }

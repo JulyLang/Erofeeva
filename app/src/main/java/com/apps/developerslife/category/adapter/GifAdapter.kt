@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.apps.developerslife.R
 import com.apps.developerslife.model.GifItem
-import com.apps.developerslife.okhttp.GlideApp
 
 class GifAdapter : RecyclerView.Adapter<BaseGifViewHolder>() {
 
@@ -29,9 +28,11 @@ class GifAdapter : RecyclerView.Adapter<BaseGifViewHolder>() {
         return gifItems.size
     }
 
-    fun update(list: List<GifItem>) {
+    fun update(newGifs: List<GifItem>) {
+        val positionStart = gifItems.size
+        val itemCount = newGifs.size - gifItems.size
         gifItems.clear()
-        gifItems.addAll(list)
-        notifyDataSetChanged()
+        gifItems.addAll(newGifs)
+        notifyItemRangeInserted(positionStart, itemCount)
     }
 }

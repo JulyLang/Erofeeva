@@ -7,6 +7,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.atomic.AtomicBoolean
 
 class CategoryPresenter(
     private val loadGifUseCase: LoadGifUseCase,
@@ -16,6 +17,7 @@ class CategoryPresenter(
     private val compositeDisposable = CompositeDisposable()
 
     private var view: CategoryContract.View? = null
+
     private var currentPosition: Int = 0
     private var gifPageState: GifPageState = GifPageState.LOADING
     private var gifPageData = GifPageData(
@@ -25,11 +27,13 @@ class CategoryPresenter(
         isBackButtonEnabled = false
     )
 
+    private val loadingStarted: AtomicBoolean = AtomicBoolean(false)
+
     override fun subscribe(view: CategoryContract.View?) {
         this.view = view
-
         view?.renderState(gifPageState, gifPageData)
-        startGifsLoading()
+        startGifsObserving()
+        startGifsLoading(clearPrevious = true)
     }
 
     override fun unsubscribe() {
@@ -65,12 +69,16 @@ class CategoryPresenter(
             isBackButtonEnabled = isBackButtonEnabled(currentPosition)
         )
         view?.renderState(gifPageState, gifPageData)
+
+        if (gifPageData.gifs.size - currentPosition <= START_LOADING_THRESHOLD) {
+            startGifsLoading(clearPrevious = false)
+        }
     }
 
     override fun onRetryButtonPressed() {
         gifPageState = GifPageState.LOADING
         view?.renderState(gifPageState, gifPageData)
-        startGifsLoading()
+        startGifsLoading(clearPrevious = false)
     }
 
     private fun isForwardButtonEnabled(position: Int, gifsSize: Int): Boolean {
@@ -81,8 +89,8 @@ class CategoryPresenter(
         return position > 0
     }
 
-    private fun startGifsLoading() {
-        val loadGifsDisposable = loadGifsUseCase.buildObservable(LoadGifsUseCase.Params("latest", 0))
+    private fun startGifsObserving() {
+        val observeGifsDisposable = loadGifsUseCase.observeGifs()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -96,11 +104,38 @@ class CategoryPresenter(
                     )
                     view?.renderState(gifPageState, gifPageData)
                 },
-                onError = { Log.e("CategoryPresenter","can\'t load gifs", it)
-                    gifPageState = GifPageState.ERROR
-                    view?.renderState(gifPageState, gifPageData)
+                onError = {
+                    Log.e(TAG,"Something went wrong", it)
                 }
             )
-        compositeDisposable.add(loadGifsDisposable)
+        compositeDisposable.add(observeGifsDisposable)
+    }
+
+    private fun startGifsLoading(clearPrevious: Boolean) {
+        Log.v(TAG, "startGifsLoading clearPrevious=$clearPrevious")
+        if (loadingStarted.compareAndSet(false, true)) {
+            val loadGifsDisposable = loadGifsUseCase.loadGifs(
+                LoadGifsUseCase.LoadParams("latest", clearPrevious)
+            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnComplete { loadingStarted.set(false) }
+                .subscribeBy(
+                    onNext = { Log.d(TAG, "Gifs was loaded with result=$it") },
+                    onError = {
+                        Log.e(TAG,"Can\'t load gifs", it)
+                        gifPageState = GifPageState.ERROR
+                        view?.renderState(gifPageState, gifPageData)
+                    }
+                )
+            compositeDisposable.add(loadGifsDisposable)
+        } else {
+            Log.v(TAG, "startGifsLoading skipped, reason: already running sync with back-end, clearPrevious=$clearPrevious")
+        }
+    }
+
+    companion object {
+        private const val TAG = "CategoryPresenter"
+        private const val START_LOADING_THRESHOLD = 3
     }
 }

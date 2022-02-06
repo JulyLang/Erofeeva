@@ -12,7 +12,14 @@ class GifRepository(
         return remoteDataStore.getRandomGif()
     }
 
-    override fun getGifPage(category: String, pageNumber: Int): Observable<List<GifModel>> {
-        return remoteDataStore.getGifPage(category, pageNumber)
+    override fun observeGifs(): Observable<List<GifModel>> {
+        return localDataStore.observeGifs()
+    }
+
+    override fun loadGifPage(category: String, clearPrevious: Boolean): Observable<Boolean> {
+        return localDataStore.getLastPageNumber()
+            .flatMap { pageNumber -> remoteDataStore.getGifPage(category, pageNumber) }
+            .flatMap { localDataStore.saveGifs(clearPrevious, it) }
+            .flatMap { result -> localDataStore.notifyGifs().map { result } }
     }
 }
