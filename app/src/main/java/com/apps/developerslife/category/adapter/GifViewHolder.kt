@@ -21,6 +21,7 @@ class GifViewHolder(itemView: View) : BaseGifViewHolder(itemView) {
     private var progressBar: ProgressBar = itemView.findViewById(R.id.progressBar)
     private var dataLoadErrorTextView: TextView = itemView.findViewById(R.id.dataLoadErrorTextView)
     private var retryButton: Button = itemView.findViewById(R.id.retryButton)
+    private var gifDescription: TextView = itemView.findViewById(R.id.gif_description)
 
     override fun onCreateViewHolder() {
         retryButton.setOnClickListener {
@@ -34,6 +35,7 @@ class GifViewHolder(itemView: View) : BaseGifViewHolder(itemView) {
     override fun onBindViewHolder(gifItem: GifItem) {
         this.gifItem = gifItem
         progressBar.visibility = View.VISIBLE
+        gifDescription.text = gifItem.gifDescription
         startImageLoading()
     }
 
@@ -41,6 +43,7 @@ class GifViewHolder(itemView: View) : BaseGifViewHolder(itemView) {
         GlideApp.with(itemGif)
             .asGif()
             .load(gifItem?.gifUrl)
+            .centerCrop()
             .listener(object : RequestListener<GifDrawable> {
                 override fun onLoadFailed(
                     e: GlideException?,

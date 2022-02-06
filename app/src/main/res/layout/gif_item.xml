@@ -7,22 +7,38 @@
 
     <ImageView
         android:id="@+id/itemGif"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
 
+    <TextView
+        android:id="@+id/gif_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/text_gradient_background"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@id/itemGif"
+        app:layout_constraintStart_toStartOf="@id/itemGif"
+        app:layout_constraintEnd_toEndOf="@id/itemGif"
+        tools:text="Sample Text" />
+
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/itemGif"
-        app:layout_constraintEnd_toEndOf="@id/itemGif"
-        app:layout_constraintTop_toTopOf="@id/itemGif"
-        app:layout_constraintBottom_toBottomOf="@id/itemGif"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:indeterminate="true"
         android:visibility="gone"
         tools:visibility="visible"/>
@@ -53,7 +69,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/dataLoadErrorTextView"
-        app:layout_constraintBottom_toBottomOf="@id/itemGif"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:visibility="gone"
         tools:visibility="visible"/>
 

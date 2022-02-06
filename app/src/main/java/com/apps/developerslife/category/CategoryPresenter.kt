@@ -119,13 +119,15 @@ class CategoryPresenter(
             )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnComplete { loadingStarted.set(false) }
+                .doAfterTerminate { loadingStarted.set(false) }
                 .subscribeBy(
                     onNext = { Log.d(TAG, "Gifs was loaded with result=$it") },
                     onError = {
                         Log.e(TAG,"Can\'t load gifs", it)
-                        gifPageState = GifPageState.ERROR
-                        view?.renderState(gifPageState, gifPageData)
+                        if (gifPageData.gifs.isEmpty()) {
+                            gifPageState = GifPageState.ERROR
+                            view?.renderState(gifPageState, gifPageData)
+                        }
                     }
                 )
             compositeDisposable.add(loadGifsDisposable)

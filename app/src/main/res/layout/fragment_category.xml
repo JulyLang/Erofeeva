@@ -10,26 +10,12 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.7"
         android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@id/back_image_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:background="#6F2196F3" />
-
-    <TextView
-        android:id="@+id/gif_description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/text_gradient_background"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingBottom="16dp"
-        android:paddingTop="16dp"
-        android:textSize="20sp"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="@id/recyclerView"
-        tools:text="Sample Text" />
 
     <ImageView
         android:id="@+id/back_image_view"
